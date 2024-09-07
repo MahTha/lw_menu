@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete EBS Volume</title>
+    <script>
+        function deleteVolume() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/cgi-bin/ebs_delete.py", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById("response").innerHTML = xhr.responseText;
+                }
+            };
+
+            var volumeId = document.getElementById("volumeId").value;
+            var region = document.getElementById("region").value;
+            var awsAccessKey = document.getElementById("awsAccessKey").value;
+            var awsSecretKey = document.getElementById("awsSecretKey").value;
+
+            var data = "volumeId=" + encodeURIComponent(volumeId) +
+                       "&region=" + encodeURIComponent(region) +
+                       "&awsAccessKey=" + encodeURIComponent(awsAccessKey) +
+                       "&awsSecretKey=" + encodeURIComponent(awsSecretKey);
+
+            xhr.send(data);
+        }
+    </script>
+</head>
+<body>
+    <h1>Delete EBS Volume</h1>
+    <form>
+        <label for="volumeId">Volume ID:</label>
+        <input type="text" id="volumeId" name="volumeId" required><br><br>
+
+        <label for="region">Region:</label>
+        <input type="text" id="region" name="region" required><br><br>
+
+        <label for="awsAccessKey">AWS Access Key:</label>
+        <input type="text" id="awsAccessKey" name="awsAccessKey" required><br><br>
+
+        <label for="awsSecretKey">AWS Secret Key:</label>
+        <input type="password" id="awsSecretKey" name="awsSecretKey" required><br><br>
+
+        <button type="button" onclick="deleteVolume()">Delete</button>
+    </form>
+    <div id="response"></div>
+</body>
+</html>
+

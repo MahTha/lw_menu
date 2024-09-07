@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Copy EBS Volume</title>
+</head>
+<body>
+	 <a href="http://3.110.87.198/index.html">HOME</a>
+        <a href="http://3.110.87.198/AWSfiles/index.html">BACK</a>
+    <h1>Copy EBS Volume</h1>
+    <form action="/cgi-bin/copy_ebs.py" method="post">
+        <label for="source_volume_id">Source Volume ID:</label><br>
+        <input type="text" id="source_volume_id" name="source_volume_id"><br><br>
+        
+        <label for="destination_region">Destination Region:</label><br>
+        <input type="text" id="destination_region" name="destination_region"><br><br>
+        
+        <label for="availability_zone">Availability Zone:</label><br>
+        <input type="text" id="availability_zone" name="availability_zone"><br><br>
+        
+        <input type="submit" value="Copy Volume">
+    </form>
+</body>
+</html>
+

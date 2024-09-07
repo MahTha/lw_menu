@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Transcribe - S3 Object Transcription</title>
+</head>
+<body>
+	 <a href="http://3.110.87.198/index.html">HOME</a>
+        <a href="http://3.110.87.198/AWSfiles/index.html">BACK</a>
+    <h1>AWS Transcribe - S3 Object Transcription</h1>
+    <form id="transcribeForm">
+        <label for="objectKey">Enter S3 Object Key:</label>
+        <input type="text" id="objectKey" name="objectKey" required>
+        <br>
+        <input type="submit" value="Transcribe">
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('transcribeForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            let objectKey = document.getElementById('objectKey').value.trim();
+            if (!objectKey) {
+                alert('Please enter an S3 object key.');
+                return;
+            }
+
+            let response = await fetch('/cgi-bin/transcribe.py', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ objectKey })
+            });
+
+            let result = await response.text();
+            document.getElementById('result').innerHTML = result;
+        });
+    </script>
+</body>
+</html>
+

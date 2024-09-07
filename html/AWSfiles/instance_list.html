@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EC2 Instances</title>
+    <script>
+        function fetchInstances() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/cgi-bin/instances_list.py", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var instances = JSON.parse(xhr.responseText);
+                    var output = "<ul>";
+                    for (var i = 0; i < instances.length; i++) {
+                        output += "<li>Instance ID: " + instances[i].InstanceId + ", State: " + instances[i].State + "</li>";
+                    }
+                    output += "</ul>";
+                    document.getElementById("output").innerHTML = output;
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+    <h1>EC2 Instances</h1>
+    <button onclick="fetchInstances()">Fetch Instances</button>
+    <div id="output"></div>
+</body>
+</html>
+

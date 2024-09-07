@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List EBS Volumes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #volumeList ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #volumeList li {
+            padding: 10px;
+            background: #f9f9f9;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #volumeList a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        #volumeList a:hover {
+            text-decoration: underline;
+        }
+        #volumeDetails {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+    <script>
+        function listVolumes() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/cgi-bin/ebs_list_post.py", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById("volumeList").innerHTML = xhr.responseText;
+                }
+            };
+
+            var region = document.getElementById("region").value;
+            var awsAccessKey = document.getElementById("awsAccessKey").value;
+            var awsSecretKey = document.getElementById("awsSecretKey").value;
+
+            var data = "region=" + encodeURIComponent(region) +
+                       "&awsAccessKey=" + encodeURIComponent(awsAccessKey) +
+                       "&awsSecretKey=" + encodeURIComponent(awsSecretKey);
+
+            xhr.send(data);
+        }
+
+        function getVolumeDetails(volumeId) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/cgi-bin/extra_ebs_list_get.py", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById("volumeDetails").innerHTML = xhr.responseText;
+                }
+            };
+
+            var region = document.getElementById("region").value;
+            var awsAccessKey = document.getElementById("awsAccessKey").value;
+            var awsSecretKey = document.getElementById("awsSecretKey").value;
+
+            var data = "volumeId=" + encodeURIComponent(volumeId) +
+                       "&region=" + encodeURIComponent(region) +
+                       "&awsAccessKey=" + encodeURIComponent(awsAccessKey) +
+                       "&awsSecretKey=" + encodeURIComponent(awsSecretKey);
+
+            xhr.send(data);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>List EBS Volumes</h1>
+        <form>
+            <label for="region">Region:</label>
+            <input type="text" id="region" name="region" required><br><br>
+
+            <label for="awsAccessKey">AWS Access Key:</label>
+            <input type="text" id="awsAccessKey" name="awsAccessKey" required><br><br>
+
+            <label for="awsSecretKey">AWS Secret Key:</label>
+            <input type="password" id="awsSecretKey" name="awsSecretKey" required><br><br>
+
+            <button type="button" onclick="listVolumes()">List Volumes</button>
+        </form>
+
+        <div id="volumeList"></div>
+        <div id="volumeDetails"></div>
+    </div>
+</body>
+</html>
+

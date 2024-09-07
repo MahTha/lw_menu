@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Web Terminal</title>
+    <style>
+        #btn:hover{
+            background-color:#333;
+            color: #fff;
+            border: none;
+            height: 30px;
+            border-radius: 5px;
+            width: 70px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            display: inline-block;
+            transform: scale(1.1);
+        }
+	a:link, a:visited {
+		color: white;
+	}
+
+	a:hover, a:active {
+		background-color: red;
+	}
+    </style>
+    <script>
+        function executeCommand() {
+            let command = document.getElementById('command').value;
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', `/cgi-bin/terminal.py?command=${encodeURIComponent(command)}`, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    document.getElementById('output').innerText = response.stdout + response.stderr;
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</head>
+
+<body style="background-image: url('https://cdn.pixabay.com/photo/2011/12/15/09/50/lagoon-nebula-11143_1280.jpg')">
+
+	 <a href="http://3.110.87.198/index.html">HOME</a>
+      
+
+    <h1 style="text-align:center; color:white ">Web Terminal</h1>
+    <div id="container" style="color:white">
+        [root@ip-172-31-21-174 ec2-user]#<input type="text" id="command" placeholder="Enter command">
+        <button id="btn" onclick="executeCommand() ">Run</button>
+        <pre id="output"></pre>
+    </div>
+
+</body>
+
+</html>
+

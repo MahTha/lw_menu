@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create and Attach EBS Volume</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+	     <a href="http://3.110.87.198/index.html">HOME</a>
+        <a href="http://3.110.87.198/AWSfiles/index.html">BACK</a>
+        <h2>Create and Attach EBS Volume</h2>
+        <form action="/cgi-bin/all_ebs.py" method="post">
+            <label for="access_key">AWS Access Key:</label>
+            <input type="text" id="access_key" name="access_key" required>
+
+            <label for="secret_key">AWS Secret Key:</label>
+            <input type="text" id="secret_key" name="secret_key" required>
+
+            <label for="region">Region:</label>
+            <input type="text" id="region" name="region" value="us-west-1" required>
+
+            <label for="availability_zone">Availability Zone:</label>
+            <input type="text" id="availability_zone" name="availability_zone" value="us-west-1a" required>
+
+            <label for="size">Size (GiB):</label>
+            <input type="number" id="size" name="size" value="10" required>
+
+            <label for="volume_type">Volume Type:</label>
+            <select id="volume_type" name="volume_type">
+                <option value="gp2">General Purpose SSD (gp2)</option>
+                <option value="io1">Provisioned IOPS SSD (io1)</option>
+                <option value="st1">Throughput Optimized HDD (st1)</option>
+                <option value="sc1">Cold HDD (sc1)</option>
+                <option value="standard">Magnetic (standard)</option>
+            </select>
+
+            <label for="instance_id">Instance ID:</label>
+            <input type="text" id="instance_id" name="instance_id" required>
+
+            <label for="device_name">Device Name:</label>
+            <input type="text" id="device_name" name="device_name" value="/dev/sdf" required>
+
+            <input type="submit" value="Create and Attach EBS">
+        </form>
+    </div>
+</body>
+</html>
+

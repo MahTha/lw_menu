@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S3 Bucket Explorer</title>
+    <script>
+        function fetchBuckets() {
+            var accessKey = document.getElementById('accessKey').value;
+            var secretKey = document.getElementById('secretKey').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/cgi-bin/get_buckets.py", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var buckets = JSON.parse(xhr.responseText);
+                    var output = "<select id='bucketSelect' onchange='fetchObjects()'>";
+                    output += "<option value=''>Select a bucket</option>";
+                    for (var i = 0; i < buckets.length; i++) {
+                        output += "<option value='" + buckets[i] + "'>" + buckets[i] + "</option>";
+                    }
+                    output += "</select>";
+                    document.getElementById("buckets").innerHTML = output;
+                }
+            };
+            xhr.send("accessKey=" + encodeURIComponent(accessKey) + "&secretKey=" + encodeURIComponent(secretKey));
+        }
+
+        function fetchObjects() {
+            var bucket = document.getElementById('bucketSelect').value;
+            var accessKey = document.getElementById('accessKey').value;
+            var secretKey = document.getElementById('secretKey').value;
+            if (bucket) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/cgi-bin/get_objects.py", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var objects = JSON.parse(xhr.responseText);
+                        var output = "<ul>";
+                        for (var i = 0; i < objects.length; i++) {
+                            output += "<li>" + objects[i] + "</li>";
+                        }
+                        output += "</ul>";
+                        document.getElementById("objects").innerHTML = output;
+                    }
+                };
+                xhr.send("bucket=" + encodeURIComponent(bucket) + "&accessKey=" + encodeURIComponent(accessKey) + "&secretKey=" + encodeURIComponent(secretKey));
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>S3 Bucket Explorer</h1>
+    <label for="accessKey">Access Key:</label>
+    <input type="text" id="accessKey" name="accessKey"><br><br>
+    <label for="secretKey">Secret Key:</label>
+    <input type="text" id="secretKey" name="secretKey"><br><br>
+    <button onclick="fetchBuckets()">Fetch Buckets</button>
+    <div id="buckets"></div>
+    <div id="objects"></div>
+</body>
+</html>
+

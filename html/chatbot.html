@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Text Generator</title>
+<!---    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6B73FF 10%, #000DFF 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            resize: none;
+        }
+
+        button {
+            background-color: #6B73FF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #000DFF;
+        }
+
+        #responseContainer {
+            margin-top: 20px;
+            padding: 10px;
+            border-top: 2px solid #ddd;
+            text-align: left;
+            font-size: 16px;
+            color: #333;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+    --->
+</head>
+<body style="background-image: url('https://cdn.pixabay.com/photo/2013/01/05/20/00/milky-way-74005_1280.jpg')">
+    <div class="container">
+	    <a href="http://3.110.87.198/index.html" style="color:white">HOME</a>
+        <h1 style="color:white">AI Text Generator</h1>
+	<textarea id="prompt" placeholder="Enter your prompt here..."></textarea><br />
+        <button id="generateButton">Generate</button>
+        <div id="responseContainer" style="color:white"></div>
+    </div>
+
+    <script>
+        document.getElementById('generateButton').addEventListener('click', function() {
+            var prompt = document.getElementById('prompt').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/cgi-bin/gemini_chat.py', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    document.getElementById('responseContainer').innerText = xhr.responseText;
+                }
+            };
+
+            xhr.send('prompt=' + encodeURIComponent(prompt));
+        });
+    </script>
+</body>
+</html>

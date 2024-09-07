@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Terminate EC2 Instance</title>
+   <!--- <style>
+        body {
+            background: linear-gradient(-45deg, #ffa07a, #eeaccd, #98d6fd, #F1F2B5, #12474e);
+            background-size: 400% 400%;
+            animation: gradient 10s ease infinite;
+            height: 100vh;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        #container {
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        input {
+            margin: 10px;
+            width: 22%;
+            height: 25px;
+            border-radius: 5px;
+            border: 1px solid #636262;
+            padding: 5px;
+        }
+
+        #btn {
+            background-color: #555;
+            color: #fff;
+            border: none;
+            height: 30px;
+            border-radius: 5px;
+            width: 150px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            display: inline-block;
+        }
+
+        #btn:hover {
+            background-color: #333;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        pre {
+            text-align: center;
+        }
+    </style>--->
+    <script>
+        function terminateInstance() {
+            let region = document.getElementById('region').value;
+            let aws_access_key_id = document.getElementById('aws_access_key_id').value;
+            let aws_secret_access_key = document.getElementById('aws_secret_access_key').value;
+            let instance_id = document.getElementById('instance_id').value;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/cgi-bin/terminate.py', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.error) {
+                        document.getElementById('output').innerText = `Error: ${response.error}`;
+                    } else {
+                        document.getElementById('output').innerText = response.success;
+                    }
+                }
+            };
+            xhr.send(`region=${encodeURIComponent(region)}&aws_access_key_id=${encodeURIComponent(aws_access_key_id)}&aws_secret_access_key=${encodeURIComponent(aws_secret_access_key)}&instance_id=${encodeURIComponent(instance_id)}`);
+        }
+    </script>
+</head>
+
+<body> 
+	 <a href="http://3.110.87.198/index.html">HOME</a>
+        <a href="http://3.110.87.198/AWSfiles/index.html">BACK</a>
+    <h1 style="text-align: center;">Terminate EC2 Instance</h1>
+    <div id="container">
+        <input type="text" id="region" placeholder="Region" required><br>
+        <input type="text" id="aws_access_key_id" placeholder="AWS Access Key ID" required><br>
+        <input type="text" id="aws_secret_access_key" placeholder="AWS Secret Access Key" required><br>
+        <input type="text" id="instance_id" placeholder="Instance ID" required><br>
+        <button id="btn" onclick="terminateInstance()">Terminate Instance</button>
+        <pre id="output"></pre>
+    </div>
+</body>
+
+</html>
+

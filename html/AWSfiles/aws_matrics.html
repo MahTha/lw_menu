@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CloudWatch Metrics</title>
+   <!--- <style>
+        body {
+            background: linear-gradient(-45deg, #ffa07a, #eeaccd, #98d6fd, #F1F2B5, #12474e);
+            background-size: 400% 400%;
+            animation: gradient 10s ease infinite;
+            height: 100vh;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        #container {
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        input {
+            margin: 10px;
+            width: 22%;
+            height: 25px;
+            border-radius: 5px;
+            border: 1px solid #353535;
+            padding: 5px;
+        }
+
+        #btn {
+            background-color: #555;
+            color: #fff;
+            border: none;
+            height: 30px;
+            border-radius: 5px;
+            width: 150px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            display: inline-block;
+        }
+
+        #btn:hover {
+            background-color: #333;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        #metrics {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #metrics h2 {
+            color: #333;
+        }
+
+        #metrics ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #metrics li {
+            background: rgba(255, 255, 255, 0.8);
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            width: 90%;
+            max-width: 600px;
+        }
+	--->
+    </style>
+    <script>
+        function fetchMetrics() {
+            var form = document.getElementById('metricsForm');
+            var formData = new FormData(form);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/cgi-bin/aws_metrics.py", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    var output = "<h2>CloudWatch Metrics</h2><ul>";
+                    data.forEach(function(point) {
+                        output += "<li>Time: " + point.Time + ", Average: " + point.Average + "</li>";
+                    });
+                    output += "</ul>";
+                    document.getElementById("metrics").innerHTML = output;
+                }
+            };
+            xhr.send(formData);
+        }
+    </script>
+</head>
+<body>
+    <div id="container">
+        <h1>Enter CloudWatch Metrics Parameters</h1>
+        <form id="metricsForm" onsubmit="event.preventDefault(); fetchMetrics();">
+            <input type="text" id="aws_access_key_id" name="aws_access_key_id" placeholder="AWS Access Key ID" required><br>
+            <input type="text" id="aws_secret_access_key" name="aws_secret_access_key" placeholder="AWS Secret Access Key" required><br>
+            <input type="text" id="region_name" name="region_name" placeholder="Region" required><br>
+            <input type="text" id="namespace" name="namespace" placeholder="Namespace" required><br>
+            <input type="text" id="metric_name" name="metric_name" placeholder="Metric Name" required><br>
+            <input type="text" id="instance_id" name="instance_id" placeholder="Instance ID" required><br>
+            <input type="submit" id="btn" value="Fetch Metrics">
+        </form>
+        <div id="metrics">
+            <p>Metrics will be displayed here...</p>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete S3 Bucket</title>
+</head>
+<body> <a href="http://3.110.87.198/index.html">HOME</a>
+        <a href="http://3.110.87.198/AWSfiles/index.html">BACK</a>
+    <h1>Delete an S3 Bucket</h1>
+    <form id="bucketForm">
+        <label for="bucketName">Bucket Name:</label>
+        <input type="text" id="bucketName" name="bucketName" required>
+        <br>
+        <label for="awsRegion">AWS Region:</label>
+        <input type="text" id="awsRegion" name="awsRegion" required>
+        <br>
+        <button type="submit">Delete Bucket</button>
+    </form>
+
+    <script>
+        document.getElementById('bucketForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const bucketName = document.getElementById('bucketName').value;
+            const awsRegion = document.getElementById('awsRegion').value;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/cgi-bin/s3_delete.py', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.message) {
+                        alert(response.message);
+                    } else if (response.error) {
+                        alert(response.error);
+                    }
+                } else if (xhr.readyState === 4) {
+                    alert('Error deleting bucket');
+                }
+            };
+            xhr.send('bucketName=' + encodeURIComponent(bucketName) + '&awsRegion=' + encodeURIComponent(awsRegion));
+        });
+    </script>
+</body>
+</html>
+
